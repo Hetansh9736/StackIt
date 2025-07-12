@@ -1,13 +1,45 @@
-# React + Vite
+# StackIt – Minimal Q&A Forum Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple, modern, and responsive Q&A platform for collaborative learning, built during the **Odoo Hackathon 2025**.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧠 Problem Statement
 
-## Expanding the ESLint configuration
+**StackIt** is a minimal question-and-answer platform designed to support structured knowledge sharing in a user-friendly and collaborative environment.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-# StackIt
+### 🎯 Core Features:
+- Ask and answer questions
+- Rich text formatting in editor
+- Tags for categorization
+- Voting and accepted answers
+- Notifications for mentions, answers, and comments
+- Admin panel (optional): moderate content, manage users
+
+For reference: [Problem PDF](./Problem%20Statements_%20Odoo%20Hackathon%20'25.pdf)
+
+---
+
+## 👤 Team Member
+
+| Name        | Email                  |
+|-------------|------------------------|
+| Hetansh     | hetanshsachaniya07@gmail.com |
+| Meet        | mrmit4040@gmail.com |
+
+(Solo developer entry)
+
+---
+
+## 🛠 Tech Stack
+
+- **React + Vite**
+- **Redux Toolkit**
+- **React Router**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **Firebase (Auth & Firestore)**
+- **Lucide React**
+- **Framer Motion**
+
+---
