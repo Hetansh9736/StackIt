@@ -1,32 +1,85 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../lib/firebase';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
+// Suggested tags for autocomplete
 const tagOptions = ['React', 'Next.js', 'Firebase', 'Tailwind', 'Auth', 'API'];
 
 const AskPage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
   const [error, setError] = useState('');
+  const [user] = useAuthState(auth);
   const navigate = useNavigate();
 
-  const toggleTag = (tag) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
+  const handleTagInputChange = (e) => {
+    const value = e.target.value;
+    setTagInput(value);
+
+    if (value.trim()) {
+      const filtered = tagOptions.filter(
+        (tag) =>
+          tag.toLowerCase().startsWith(value.toLowerCase()) &&
+          !selectedTags.includes(tag)
+      );
+      setSuggestions(filtered);
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      setSuggestions([]);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleTagKeyDown = (e) => {
+    if ((e.key === 'Enter' || e.key === ',') && tagInput.trim()) {
+      e.preventDefault();
+      const newTag = tagInput.trim();
+      if (!selectedTags.includes(newTag)) {
+        setSelectedTags([...selectedTags, newTag]);
+      }
+      setTagInput('');
+      setSuggestions([]);
+    }
+  };
+
+  const handleTagSelect = (tag) => {
+    setSelectedTags([...selectedTags, tag]);
+    setTagInput('');
+    setSuggestions([]);
+  };
+
+  const removeTag = (index) => {
+    setSelectedTags((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!title.trim() || !description.trim() || selectedTags.length === 0) {
       setError('All fields are required.');
       return;
     }
-    // Simulate form submission
-    console.log({ title, description, tags: selectedTags });
-    navigate('/');
+
+    try {
+      await addDoc(collection(db, 'questions'), {
+        title,
+        description,
+        tags: selectedTags,
+        user: user?.email || 'Anonymous',
+        createdAt: serverTimestamp(),
+        votes: 0,
+        comments: 0,
+      });
+
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -37,6 +90,7 @@ const AskPage = () => {
         {error && <p className="text-red-500 mb-4">{error}</p>}
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Title */}
           <div>
             <label className="block mb-2 font-medium">Title</label>
             <input
@@ -48,6 +102,7 @@ const AskPage = () => {
             />
           </div>
 
+          {/* Description */}
           <div>
             <label className="block mb-2 font-medium">Description</label>
             <textarea
@@ -58,26 +113,57 @@ const AskPage = () => {
             />
           </div>
 
+          {/* Tags */}
           <div>
             <label className="block mb-2 font-medium">Tags</label>
-            <div className="flex flex-wrap gap-2">
-              {tagOptions.map((tag) => (
-                <button
-                  type="button"
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={`px-3 py-1 rounded-full border text-sm transition-all duration-200 ${
-                    selectedTags.includes(tag)
-                      ? 'bg-cyan-500 border-cyan-600 text-white'
-                      : 'bg-neutral-700 border-neutral-600 text-white hover:bg-neutral-600'
-                  }`}
+
+            {/* Selected Tags */}
+            <div className="flex flex-wrap gap-2 mb-2">
+              {selectedTags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="bg-cyan-600 text-white px-3 py-1 rounded-full flex items-center gap-2"
                 >
                   {tag}
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => removeTag(index)}
+                    className="text-sm font-bold"
+                  >
+                    ×
+                  </button>
+                </span>
               ))}
             </div>
+
+            {/* Tag Input */}
+            <input
+              type="text"
+              value={tagInput}
+              placeholder="Start typing a tag..."
+              onChange={handleTagInputChange}
+              onKeyDown={handleTagKeyDown}
+              className="w-full bg-neutral-900 border border-neutral-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-cyan-500"
+            />
+
+            {/* Suggestions */}
+            {suggestions.length > 0 && (
+              <div className="mt-2 bg-neutral-800 border border-neutral-700 rounded-md shadow-md">
+                {suggestions.map((tag, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    onClick={() => handleTagSelect(tag)}
+                    className="block w-full text-left px-4 py-2 hover:bg-neutral-700 transition-colors"
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
+          {/* Submit Button */}
           <div className="pt-4">
             <button
               type="submit"

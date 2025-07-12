@@ -1,20 +1,31 @@
-import { Routes, Route } from 'react-router-dom';
-import Layout from './Components/Layout';
+import {  Routes, Route } from 'react-router-dom';
+import ProtectedRoute from './Components/ProtectedRoute';
 import Home from './Pages/Home';
-import Ask from './Pages/AskPage';
+import AskPage from './Pages/AskPage';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-
-export default function App() {
+import Layout from './Components/Layout';
+import QuestionPage from './Pages/QuestionPage';
+function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/ask" element={<Ask />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        {/* Add more routes here */}
-      </Route>
-    </Routes>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/ask"
+            element={
+              <ProtectedRoute>
+                <AskPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/question/:id" element={<QuestionPage />} />
+
+        </Route>
+      </Routes>
   );
 }
+
+export default App;

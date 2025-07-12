@@ -1,21 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../lib/firebase';
 
-export default function Register()  {
+const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     if (!name || !email || !password) {
-      setError('Please fill in all fields');
+      setError('All fields are required');
       return;
     }
-    console.log('Register:', { name, email, password });
-    navigate('/');
+
+    try {
+      const userCred = await createUserWithEmailAndPassword(auth, email, password);
+
+      // Update Firebase Auth profile
+      await updateProfile(userCred.user, {
+        displayName: name,
+      });
+
+      // Store user info in Firestore
+      await setDoc(doc(db, 'users', userCred.user.uid), {
+        name,
+        email,
+        createdAt: new Date(),
+      });
+
+      navigate('/');
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -50,7 +71,7 @@ export default function Register()  {
               type="submit"
               className="w-full bg-cyan-500 hover:bg-cyan-600 text-white py-2 rounded-xl font-medium"
             >
-              Create Account
+              Sign Up
             </button>
           </form>
         </div>
@@ -58,3 +79,5 @@ export default function Register()  {
     </div>
   );
 };
+
+export default Register;
