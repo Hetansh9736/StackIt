@@ -25,9 +25,8 @@ For reference: [Problem PDF](./Problem%20Statements_%20Odoo%20Hackathon%20'25.pd
 | Name        | Email                  |
 |-------------|------------------------|
 | Hetansh     | hetanshsachaniya07@gmail.com |
-| Meet        | mrmit4040@gmail.com |
+| Meet        |  mrmit4040@gmail.com |
 
-(Solo developer entry)
 
 ---
 
