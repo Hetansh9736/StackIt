@@ -6,7 +6,7 @@ StackIt is a modern and minimal developer Q&A platform inspired by Stack Overflo
 
 ## 🔗 Live Demo
 
-▶️ **Watch the demo video:** [Click here]([https://your-video-link.com](https://www.loom.com/share/55ce53885f224bb7bf464386ec96b935?sid=4a4c60e5-2631-427a-bd1f-576380de3c1e))  
+▶️ **Watch the demo video:** https://your-video-link.com](https://www.loom.com/share/55ce53885f224bb7bf464386ec96b935?sid=4a4c60e5-2631-427a-bd1f-576380de3c1e 
 
 ---
 
