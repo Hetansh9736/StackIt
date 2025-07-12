@@ -35,6 +35,13 @@ StackIt is a modern and minimal developer Q&A platform inspired by Stack Overflo
 
 ---
 
+👥 Team Members
+👨‍💻 Hetansh Sachaniya
+Firebase Integration, Ask Page, User Management
+
+👨‍💻 Meet Kanojiya
+Home Page, Pagination, Search & Filter Logic
+
 ## 🚀 Getting Started
 
 ```bash
@@ -55,12 +62,6 @@ VITE_FIREBASE_APP_ID=your_app_id
 
 4. Run the app
 
-👥 Team Members
-👨‍💻 Hetansh Sachaniya
-Firebase Integration, Ask Page, User Management
-
-👨‍💻 Meet Kanojiya
-Home Page, Pagination, Search & Filter Logic
 
 📂 Folder Structure
 src/
