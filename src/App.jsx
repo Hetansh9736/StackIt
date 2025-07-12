@@ -1,4 +1,4 @@
-import {  Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './Components/ProtectedRoute';
 import Home from './Pages/Home';
 import AskPage from './Pages/AskPage';
@@ -8,23 +8,25 @@ import Layout from './Components/Layout';
 import QuestionPage from './Pages/QuestionPage';
 function App() {
   return (
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/ask"
-            element={
-              <ProtectedRoute>
-                <AskPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/question/:id" element={<QuestionPage />} />
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route
+          path="/ask"
+          element={
+            <ProtectedRoute>
+              <AskPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/question/:id" element={<ProtectedRoute>
+          <QuestionPage />
+        </ProtectedRoute>} />
 
-        </Route>
-      </Routes>
+      </Route>
+    </Routes>
   );
 }
 

@@ -20,11 +20,11 @@ const tagColors = {
   'Server Components': 'bg-red-500',
 };
 
-const filterOptions = ['Newest', 'Most Voted', 'Unanswered', 'All'];
+const filterOptions = ['All', 'Newest', 'Most Voted', 'Unanswered'];
 
 const Home = () => {
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('Newest');
+  const [filter, setFilter] = useState('All');
   const [showDropdown, setShowDropdown] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [page, setPage] = useState(1);
@@ -32,7 +32,7 @@ const Home = () => {
 
   const limit = 12;
 
-  // Fetch questions
+  // Fetch questions from Firestore
   useEffect(() => {
     const fetchQuestions = async () => {
       setLoading(true);
@@ -49,6 +49,7 @@ const Home = () => {
       }
       setLoading(false);
     };
+
     fetchQuestions();
   }, []);
 
@@ -71,6 +72,9 @@ const Home = () => {
     } else if (filter === 'Most Voted') {
       result.sort((a, b) => (b.votes || 0) - (a.votes || 0));
     } else if (filter === 'Newest') {
+      result.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
+    } else if (filter === 'All') {
+      // Optional: default sort by latest
       result.sort((a, b) => b.createdAt?.seconds - a.createdAt?.seconds);
     }
 
@@ -148,15 +152,24 @@ const Home = () => {
                 <p className="text-sm text-neutral-400 mb-3 line-clamp-3">{q.description}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {q.tags?.map(tag => (
-                    <span key={tag} className={`text-xs px-2 py-1 rounded-full ${tagColors[tag] || 'bg-neutral-600'}`}>
+                    <span
+                      key={tag}
+                      className={`text-xs px-2 py-1 rounded-full ${
+                        tagColors[tag] || 'bg-neutral-600'
+                      }`}
+                    >
                       {tag}
                     </span>
                   ))}
                 </div>
                 <div className="flex justify-between items-center text-sm text-neutral-400">
                   <div className="flex gap-4">
-                    <span className="flex items-center gap-1"><ThumbsUp size={14} /> {q.votes || 0}</span>
-                    <span className="flex items-center gap-1"><MessageCircle size={14} /> {q.comments || 0}</span>
+                    <span className="flex items-center gap-1">
+                      <ThumbsUp size={14} /> {q.votes || 0}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <MessageCircle size={14} /> {q.comments || 0}
+                    </span>
                   </div>
                   <span className="text-xs">
                     {q.userName || (q.user?.split('@')[0] ?? 'Anonymous')} •{' '}

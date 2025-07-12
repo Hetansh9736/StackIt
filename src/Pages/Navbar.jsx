@@ -63,15 +63,7 @@ const Navbar = () => {
             </Link>
           ))}
 
-          <Link to="/notifications" className="relative text-neutral-100 hover:text-cyan-400 flex items-center gap-2">
-            <Bell size={18} />
-            {unreadCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-cyan-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                {unreadCount}
-              </span>
-            )}
-            Notifications
-          </Link>
+         
 
           {user ? (
             <div className="flex items-center gap-4 pl-4 border-l border-neutral-700">
